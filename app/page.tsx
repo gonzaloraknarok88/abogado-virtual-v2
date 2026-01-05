@@ -1,152 +1,110 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import Link from 'next/link';
 
-interface Lead {
+interface Lawyer {
   id: string;
   nombre: string;
-  email: string;
+  especialidad: string;
   telefono: string;
-  tipoCaso: string;
-  descripcion: string;
-  estado: string;
-  fecha: string;
+  isPro: boolean;
 }
 
-const DEMO_LEADS: Lead[] = [
-  { id: '1', nombre: 'Juan Pérez', email: 'juan@example.com', telefono: '555-0101', tipoCaso: 'Laboral', descripcion: 'Demanda por despido injustificado', estado: 'Nuevo', fecha: '2024-01-15' },
-  { id: '2', nombre: 'María García', email: 'maria@example.com', telefono: '555-0102', tipoCaso: 'Civil', descripcion: 'Conflicto de herencia', estado: 'En proceso', fecha: '2024-01-16' },
-  { id: '3', nombre: 'Carlos López', email: 'carlos@example.com', telefono: '555-0103', tipoCaso: 'Penal', descripcion: 'Defensa en caso de fraude', estado: 'Cerrado', fecha: '2024-01-17' },
-  { id: '4', nombre: 'Ana Martínez', email: 'ana@example.com', telefono: '555-0104', tipoCaso: 'Familia', descripcion: 'Custodia de menores', estado: 'Nuevo', fecha: '2024-01-18' },
-  { id: '5', nombre: 'Roberto Fernández', email: 'roberto@example.com', telefono: '555-0105', tipoCaso: 'Laboral', descripcion: 'Reclamo de horas extras', estado: 'En proceso', fecha: '2024-01-19' }
+const LAWYERS: Lawyer[] = [
+  { id: '1', nombre: 'Rayén', especialidad: 'Derecho Laboral & Penal', telefono: '+56 9 1234 5678', isPro: true },
+  { id: '2', nombre: 'Yuri', especialidad: 'Derecho Civil & Familia', telefono: '+56 9 9876 5432', isPro: true },
 ];
 
 export default function Home() {
-  const [leads, setLeads] = useState<Lead[]>(DEMO_LEADS);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState('');
-  const [filterStatus, setFilterStatus] = useState('');
-
-  const filteredLeads = leads.filter(lead => {
-    const matchSearch = lead.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                       lead.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchType = !filterType || lead.tipoCaso === filterType;
-    const matchStatus = !filterStatus || lead.estado === filterStatus;
-    return matchSearch && matchType && matchStatus;
-  });
-
-  const caseTypes = ['Laboral', 'Civil', 'Penal', 'Familia', 'Comercial'];
-  const statuses = ['Nuevo', 'En proceso', 'Cerrado'];
+  const [currentPage, setCurrentPage] = useState('inicio');
 
   return (
-    <main className="min-h-screen p-4 sm:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Abogado Virtual</h1>
-          <p className="text-gray-600">Dashboard de gestión de leads y casos</p>
+    <main className="min-h-screen bg-gradient-to-b from-primary to-blue-900">
+      {/* HEADER PROFESIONAL */}
+      <header className="bg-primary text-white p-4 border-b-4 border-secondary shadow-lg">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-3xl md:text-5xl font-bold text-secondary mb-2">⚖️ ABOGADO VIRTUAL</h1>
+          <p className="text-xl md:text-2xl font-semibold text-white">ABOGADO MATCH! Escoge tu abogado</p>
         </div>
+      </header>
 
-        {/* Filters Card */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Filtros</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Search */}
-            <input
-              type="text"
-              placeholder="Buscar por nombre o email"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {/* Case Type Filter */}
-            <select
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Todos los tipos</option>
-              {caseTypes.map(type => (
-                <option key={type} value={type}>{type}</option>
-              ))}
-            </select>
-            {/* Status Filter */}
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Todos los estados</option>
-              {statuses.map(status => (
-                <option key={status} value={status}>{status}</option>
-              ))}
-            </select>
-            {/* Reset */}
-            <button
-              onClick={() => {
-                setSearchTerm('');
-                setFilterType('');
-                setFilterStatus('');
-              }}
-              className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
-            >
-              Limpiar filtros
-            </button>
+      {/* SECCIÓN DE ABOGADOS PRO */}
+      <section className="bg-primary text-white p-6 md:p-8">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-secondary border-b-2 border-secondary pb-3">Nuestros Abogados Premium PRO</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {LAWYERS.map((lawyer) => (
+              <div key={lawyer.id} className="bg-white text-gray-900 rounded-lg shadow-xl p-6 border-4 border-secondary hover:shadow-2xl transition transform hover:scale-105">
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="text-2xl font-bold text-primary">{lawyer.nombre}</h3>
+                  {lawyer.isPro && (
+                    <span className="bg-secondary text-primary px-3 py-1 rounded-full font-bold text-sm">PRO</span>
+                  )}
+                </div>
+                <p className="text-lg text-gray-700 mb-2"><strong>Especialidad:</strong> {lawyer.especialidad}</p>
+                <p className="text-lg text-gray-700 mb-4"><strong>Teléfono:</strong> <a href={`tel:${lawyer.telefono}`} className="text-secondary hover:underline">{lawyer.telefono}</a></p>
+                <button className="w-full bg-secondary text-primary font-bold py-2 px-4 rounded hover:bg-yellow-400 transition">
+                  Contactar a {lawyer.nombre}
+                </button>
+              </div>
+            ))}
           </div>
         </div>
+      </section>
 
-        {/* Results Summary */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-          <p className="text-gray-700">Se encontraron <span className="font-bold text-blue-600">{filteredLeads.length}</span> de <span className="font-bold">{leads.length}</span> leads</p>
-        </div>
+      {/* SECCIÓN PRINCIPAL DE BIENVENIDA */}
+      <section className="bg-gradient-to-b from-blue-900 to-primary text-white p-6 md:p-12">
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Bienvenido a Abogado Virtual</h2>
+          <p className="text-lg md:text-xl mb-8 text-gray-200">Conecta con los mejores abogados de forma rápida y segura</p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-white bg-opacity-10 rounded-lg p-6 border-2 border-secondary">
+              <p className="text-4xl mb-2">⚡</p>
+              <h3 className="text-xl font-bold mb-2">Rápido</h3>
+              <p>Acceso inmediato a abogados calificados</p>
+            </div>
+            <div className="bg-white bg-opacity-10 rounded-lg p-6 border-2 border-secondary">
+              <p className="text-4xl mb-2">🔒</p>
+              <h3 className="text-xl font-bold mb-2">Seguro</h3>
+              <p>Tus datos protegidos y confidenciales</p>
+            </div>
+            <div className="bg-white bg-opacity-10 rounded-lg p-6 border-2 border-secondary">
+              <p className="text-4xl mb-2">✓</p>
+              <h3 className="text-xl font-bold mb-2">Profesional</h3>
+              <p>Abogados verificados y certificados</p>
+            </div>
+          </div>
 
-        {/* Leads Table */}
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          {filteredLeads.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-100 border-b border-gray-300">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Nombre</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Teléfono</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Tipo de Caso</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Estado</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Fecha</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredLeads.map((lead, index) => (
-                    <tr key={lead.id} className={`border-b border-gray-200 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-50 transition`}>
-                      <td className="px-4 py-3 text-sm text-gray-900 font-medium">{lead.nombre}</td>
-                      <td className="px-4 py-3 text-sm text-gray-600">{lead.email}</td>
-                      <td className="px-4 py-3 text-sm text-gray-600">{lead.telefono}</td>
-                      <td className="px-4 py-3 text-sm">
-                        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-                          {lead.tipoCaso}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-sm">
-                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                          lead.estado === 'Nuevo' ? 'bg-green-100 text-green-800' :
-                          lead.estado === 'En proceso' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-gray-100 text-gray-800'
-                        }`}>
-                          {lead.estado}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-600">{lead.fecha}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="p-8 text-center">
-              <p className="text-gray-500 text-lg">No se encontraron leads con los filtros seleccionados</p>
-            </div>
-          )}
+          <div className="flex flex-col md:flex-row gap-4 justify-center">
+            <Link href="/formulario" className="bg-secondary text-primary font-bold py-3 px-8 rounded-lg hover:bg-yellow-400 transition text-lg">
+              Crear Nuevo Caso
+            </Link>
+            <Link href="/elegir-abogado" className="bg-white text-primary font-bold py-3 px-8 rounded-lg hover:bg-gray-100 transition text-lg">
+              Elegir Abogado
+            </Link>
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* SECCIÓN DE ESPECIALIDADES */}
+      <section className="bg-primary text-white p-6 md:p-8 border-t-4 border-secondary">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-secondary">Especialidades Disponibles</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {['Laboral', 'Civil', 'Penal', 'Familia', 'Comercial', 'Administrativo'].map((specialty) => (
+              <div key={specialty} className="bg-white bg-opacity-10 border-2 border-secondary rounded-lg p-4 text-center hover:bg-opacity-20 transition">
+                <p className="font-bold text-lg">{specialty}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="bg-gray-900 text-white text-center p-4 border-t-4 border-secondary">
+        <p className="text-sm md:text-base">© 2026 Abogado Virtual. Todos los derechos reservados. | Plataforma profesional de consultoría legal</p>
+      </footer>
     </main>
   );
 }
