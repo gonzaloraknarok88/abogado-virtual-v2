@@ -2,109 +2,117 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-interface Lawyer {
-  id: string;
-  nombre: string;
-  especialidad: string;
-  telefono: string;
-  isPro: boolean;
-}
+export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-const LAWYERS: Lawyer[] = [
-  { id: '1', nombre: 'Rayén', especialidad: 'Derecho Laboral & Penal', telefono: '+56 9 1234 5678', isPro: true },
-  { id: '2', nombre: 'Yuri', especialidad: 'Derecho Civil & Familia', telefono: '+56 9 9876 5432', isPro: true },
-];
-
-export default function Home() {
-  const [currentPage, setCurrentPage] = useState('inicio');
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    // Simulación de login
+    setTimeout(() => {
+      setIsLoading(false);
+      if (email && password) {
+        alert(`Bienvenido ${email}!`);
+      }
+    }, 1000);
+  };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-primary to-blue-900">
-      {/* HEADER PROFESIONAL */}
-      <header className="bg-primary text-white p-4 border-b-4 border-secondary shadow-lg">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl md:text-5xl font-bold text-secondary mb-2">⚖️ ABOGADO VIRTUAL</h1>
-          <p className="text-xl md:text-2xl font-semibold text-white">ABOGADO MATCH! Escoge tu abogado</p>
+    <div className="min-h-screen bg-gradient-to-br from-primary via-blue-800 to-blue-900 flex flex-col">
+      {/* NAV SUPERIOR */}
+      <nav className="bg-black bg-opacity-40 backdrop-blur text-white px-4 py-3 flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-secondary">⚖️ ABOGADO VIRTUAL</h1>
+        <div className="flex gap-4 text-sm">
+          <Link href="#" className="hover:text-secondary transition">Inicio</Link>
+          <Link href="#" className="hover:text-secondary transition">Contacto</Link>
+          <Link href="#" className="hover:text-secondary transition">FAQ</Link>
         </div>
-      </header>
+      </nav>
 
-      {/* SECCIÓN DE ABOGADOS PRO */}
-      <section className="bg-primary text-white p-6 md:p-8">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-secondary border-b-2 border-secondary pb-3">Nuestros Abogados Premium PRO</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {LAWYERS.map((lawyer) => (
-              <div key={lawyer.id} className="bg-white text-gray-900 rounded-lg shadow-xl p-6 border-4 border-secondary hover:shadow-2xl transition transform hover:scale-105">
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-2xl font-bold text-primary">{lawyer.nombre}</h3>
-                  {lawyer.isPro && (
-                    <span className="bg-secondary text-primary px-3 py-1 rounded-full font-bold text-sm">PRO</span>
-                  )}
-                </div>
-                <p className="text-lg text-gray-700 mb-2"><strong>Especialidad:</strong> {lawyer.especialidad}</p>
-                <p className="text-lg text-gray-700 mb-4"><strong>Teléfono:</strong> <a href={`tel:${lawyer.telefono}`} className="text-secondary hover:underline">{lawyer.telefono}</a></p>
-                <button className="w-full bg-secondary text-primary font-bold py-2 px-4 rounded hover:bg-yellow-400 transition">
-                  Contactar a {lawyer.nombre}
-                </button>
+      {/* CONTENIDO PRINCIPAL */}
+      <div className="flex-1 flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-md">
+          {/* SECCIÓN IZQUIERDA - INFO */}
+          <div className="text-center text-white mb-12">
+            <div className="mb-8 flex justify-center">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-secondary to-amber-600 border-4 border-white shadow-2xl flex items-center justify-center">
+                <span className="text-5xl">👤</span>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* SECCIÓN PRINCIPAL DE BIENVENIDA */}
-      <section className="bg-gradient-to-b from-blue-900 to-primary text-white p-6 md:p-12">
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Bienvenido a Abogado Virtual</h2>
-          <p className="text-lg md:text-xl mb-8 text-gray-200">Conecta con los mejores abogados de forma rápida y segura</p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white bg-opacity-10 rounded-lg p-6 border-2 border-secondary">
-              <p className="text-4xl mb-2">⚡</p>
-              <h3 className="text-xl font-bold mb-2">Rápido</h3>
-              <p>Acceso inmediato a abogados calificados</p>
             </div>
-            <div className="bg-white bg-opacity-10 rounded-lg p-6 border-2 border-secondary">
-              <p className="text-4xl mb-2">🔒</p>
-              <h3 className="text-xl font-bold mb-2">Seguro</h3>
-              <p>Tus datos protegidos y confidenciales</p>
-            </div>
-            <div className="bg-white bg-opacity-10 rounded-lg p-6 border-2 border-secondary">
-              <p className="text-4xl mb-2">✓</p>
-              <h3 className="text-xl font-bold mb-2">Profesional</h3>
-              <p>Abogados verificados y certificados</p>
-            </div>
+            <h2 className="text-4xl font-black mb-2 text-secondary">ABOGADO VIRTUAL</h2>
+            <p className="text-xl font-light mb-1">ABOGADO MATCH</p>
+            <p className="text-sm text-gray-300">Tu plataforma de consultoría legal online</p>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <Link href="/formulario" className="bg-secondary text-primary font-bold py-3 px-8 rounded-lg hover:bg-yellow-400 transition text-lg">
-              Crear Nuevo Caso
-            </Link>
-            <Link href="/elegir-abogado" className="bg-white text-primary font-bold py-3 px-8 rounded-lg hover:bg-gray-100 transition text-lg">
-              Elegir Abogado
-            </Link>
-          </div>
-        </div>
-      </section>
+          {/* TARJETA DE LOGIN */}
+          <div className="bg-white bg-opacity-95 backdrop-blur rounded-3xl shadow-2xl p-8 border-4 border-secondary">
+            <h3 className="text-2xl font-bold text-primary text-center mb-1">INGRESA A TU CUENTA</h3>
+            <p className="text-center text-gray-600 text-sm mb-6">Acceso rápido y seguro</p>
 
-      {/* SECCIÓN DE ESPECIALIDADES */}
-      <section className="bg-primary text-white p-6 md:p-8 border-t-4 border-secondary">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-secondary">Especialidades Disponibles</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {['Laboral', 'Civil', 'Penal', 'Familia', 'Comercial', 'Administrativo'].map((specialty) => (
-              <div key={specialty} className="bg-white bg-opacity-10 border-2 border-secondary rounded-lg p-4 text-center hover:bg-opacity-20 transition">
-                <p className="font-bold text-lg">{specialty}</p>
+            <form onSubmit={handleLogin} className="space-y-4">
+              {/* EMAIL */}
+              <div>
+                <label className="block text-sm font-bold text-primary mb-2">CORREO ELECTRÓNICO</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="tu@email.com"
+                  required
+                  className="w-full px-4 py-3 rounded-xl border-2 border-secondary focus:outline-none focus:ring-2 focus:ring-secondary bg-gray-50 text-gray-900 placeholder-gray-400"
+                />
               </div>
-            ))}
+
+              {/* CONTRASEÑA */}
+              <div>
+                <label className="block text-sm font-bold text-primary mb-2">CONTRASEÑA</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  className="w-full px-4 py-3 rounded-xl border-2 border-secondary focus:outline-none focus:ring-2 focus:ring-secondary bg-gray-50 text-gray-900 placeholder-gray-400"
+                />
+              </div>
+
+              {/* BOTÓN LOGIN */}
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-gradient-to-r from-secondary to-amber-600 text-primary font-bold py-3 px-4 rounded-xl hover:shadow-lg transition transform hover:scale-105 disabled:opacity-50 mt-6"
+              >
+                {isLoading ? 'CARGANDO...' : 'INGRESAR'}
+              </button>
+
+              {/* ENLACES */}
+              <div className="flex justify-between text-xs text-primary font-semibold mt-4">
+                <Link href="#" className="hover:text-secondary">Olvidé mi contraseña</Link>
+                <Link href="#" className="hover:text-secondary">Crear cuenta</Link>
+              </div>
+            </form>
+          </div>
+
+          {/* SECCIÓN INFO ABOGADOS */}
+          <div className="mt-8 grid grid-cols-2 gap-4">
+            <div className="bg-white bg-opacity-10 backdrop-blur rounded-xl p-4 border border-secondary border-opacity-50 text-white text-center">
+              <p className="text-2xl font-bold text-secondary mb-1">Rayén</p>
+              <p className="text-xs">PRO - Laboral & Penal</p>
+            </div>
+            <div className="bg-white bg-opacity-10 backdrop-blur rounded-xl p-4 border border-secondary border-opacity-50 text-white text-center">
+              <p className="text-2xl font-bold text-secondary mb-1">Yuri</p>
+              <p className="text-xs">PRO - Civil & Familia</p>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* FOOTER */}
-      <footer className="bg-gray-900 text-white text-center p-4 border-t-4 border-secondary">
-        <p className="text-sm md:text-base">© 2026 Abogado Virtual. Todos los derechos reservados. | Plataforma profesional de consultoría legal</p>
+      <footer className="bg-black bg-opacity-60 text-white text-center py-4 border-t border-secondary border-opacity-30">
+        <p className="text-xs">© 2026 Abogado Virtual. Todos los derechos reservados.</p>
       </footer>
-    </main>
+    </div>
   );
 }
